@@ -28,3 +28,15 @@ export function countdownClass(s){if(s<=0)return'count-send';if(s<=3)return'coun
 export function countdownText(s){return s<=0?'SEND':secondsToMmSs(s)}
 export function getRallyCountdownSeconds(r,now=Date.now()){const end=Number(r.rallyEndMs||0);return end?Math.ceil((end-now)/1000):0}
 export function isExpiredRally(r,now=Date.now()){const end=Number(r.enemyHitEndMs||r.rallyEndMs||0);return !!end&&now>=end+RALLY_EXPIRE_BUFFER_MS}
+
+export function getEnemyMarchCountdownSeconds(r,now=Date.now()){
+  const rallyEnd=Number(r.rallyEndMs||0);
+  const enemyMarch=Number(r.enemyMarchSeconds||0);
+  if(!rallyEnd)return 0;
+  if(now<rallyEnd)return enemyMarch;
+  const end=rallyEnd+(enemyMarch*1000);
+  return Math.ceil((end-now)/1000);
+}
+export function getPhaseFromRally(r,now=Date.now()){
+  return now>=Number(r.rallyEndMs||0)?'march':'rally';
+}

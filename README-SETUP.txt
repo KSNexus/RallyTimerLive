@@ -28,3 +28,14 @@ This means:
 - New players logging in after Send can still see active sent rallies.
 - Changing player march time recalculates the countdown live.
 - Rally colours are stored on the profile, so the same profile keeps the same colour.
+
+V2.1 PHASE HOTFIX:
+- Admin active rally timer no longer uses traffic light colours; it stays on the profile colour.
+- Removed descriptive text under the active rally name.
+- Admin active rallies now show Rally and March timers.
+- Enemy March timer begins when visible rally timer reaches 00:00.
+- Rally +/- adjustment buttons disable once march phase begins.
+- Admin active rally auto-deletes after enemy march timer reaches 00:00.
+- Player rallies now show Send and March timers.
+- Player March timer begins when Send reaches 00:00.
+- Player rally rows auto-hide 2 seconds after the player's march timer reaches 00:00.
