@@ -110,7 +110,6 @@ window.sendToPlayers=async(id)=>{
   },{merge:true});
 
   await setDoc(doc(db,'activeRallies',id),{sent:true,sentAtMs:now,updatedAt:serverTimestamp()},{merge:true});
-  alert('Rally sent to players.');
 };
 
 window.deleteActiveRally=async(id)=>{
@@ -123,6 +122,25 @@ window.deletePlayer=async(id)=>{
   if(!confirm('Delete this player?'))return;
   await deleteDoc(doc(db,'players',id));
 };
+
+
+let holdAdjustTimer=null;
+let holdAdjustDelay=null;
+
+function clearHoldAdjust(){
+  if(holdAdjustDelay){clearTimeout(holdAdjustDelay);holdAdjustDelay=null;}
+  if(holdAdjustTimer){clearInterval(holdAdjustTimer);holdAdjustTimer=null;}
+}
+
+window.startHoldAdjust=(id,delta)=>{
+  clearHoldAdjust();
+  adjustActiveRally(id,delta);
+  holdAdjustDelay=setTimeout(()=>{
+    holdAdjustTimer=setInterval(()=>adjustActiveRally(id,delta),100);
+  },500);
+};
+
+window.stopHoldAdjust=clearHoldAdjust;
 
 function renderProfiles(){
   const el=document.getElementById('profileList');
@@ -172,8 +190,8 @@ function renderActiveRallies(){
         </div>
       </div>
       <div class="instance-controls">
-        <button class="secondary${disabledClass}" ${disabled} onclick="adjustActiveRally('${r.id}',-1)">-1</button>
-        <button class="secondary${disabledClass}" ${disabled} onclick="adjustActiveRally('${r.id}',1)">+1</button>
+        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-1)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-1</button>
+        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',1)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+1</button>
         <button class="good" onclick="sendToPlayers('${r.id}')">Send</button>
         <button class="danger" onclick="deleteActiveRally('${r.id}')">Delete</button>
       </div>

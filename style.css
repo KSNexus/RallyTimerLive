@@ -34,3 +34,6 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
   .player-timer-block{min-width:56px}
   .player-timer-block .rally-countdown{font-size:16px}
 }
+
+/* V2.2 */
+.instance-controls button{touch-action:manipulation;user-select:none;-webkit-user-select:none;}

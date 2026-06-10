@@ -93,15 +93,14 @@ function renderRallies(){
       const color=r.color||colorForId(r.profileId||r.sourceRallyId||r.id);
       const sendCls=countdownClass(r.timing.sendSeconds);
       const sendColor=sendCls?'':`style="color:${color}"`;
+      const marchSeconds=parseMmSsToSeconds(document.getElementById('marchAdjustInput')?.value||currentMarchTime)||0;
       const marchActive=r.timing.sendSeconds<=0;
-      const marchText=marchActive?countdownText(r.timing.marchSeconds):'--:--';
-      const marchCls=marchActive?countdownClass(r.timing.marchSeconds):'';
-      const marchColor=marchCls?'':`style="color:${color}"`;
+      const marchDisplay=marchActive?r.timing.marchSeconds:marchSeconds;
       return `<div class="rally-row player-phase-row" style="color:${color}">
         <div class="rally-name">${esc(r.name)}</div>
         <div class="player-timer-pair">
           <div class="player-timer-block"><div class="player-timer-label">Send</div><div class="rally-countdown ${sendCls}" ${sendColor}>${countdownText(r.timing.sendSeconds)}</div></div>
-          <div class="player-timer-block"><div class="player-timer-label">March</div><div class="rally-countdown ${marchCls}" ${marchColor}>${marchText}</div></div>
+          <div class="player-timer-block"><div class="player-timer-label">March</div><div class="rally-countdown" style="color:${color}">${countdownText(marchDisplay)}</div></div>
         </div>
       </div>`;
     });

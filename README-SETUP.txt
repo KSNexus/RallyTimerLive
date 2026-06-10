@@ -39,3 +39,13 @@ V2.1 PHASE HOTFIX:
 - Player rallies now show Send and March timers.
 - Player March timer begins when Send reaches 00:00.
 - Player rally rows auto-hide 2 seconds after the player's march timer reaches 00:00.
+
+V2.2 HOTFIX:
+- Removed the blocking "Rally sent to players" popup.
+- Admin active rally +/- buttons now support hold-to-adjust.
+- Single tap still adjusts by 1 second.
+- Holding starts auto-repeat after 0.5 seconds and repeats every 0.1 seconds.
+- Hold-to-adjust applies only to admin active rally timer controls.
+- Player March timer no longer uses traffic light colours.
+- Player March timer is visible immediately using the player's march time.
+- Player March timer starts counting down only after SEND reaches 00:00.
