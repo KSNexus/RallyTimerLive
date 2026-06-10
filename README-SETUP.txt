@@ -1,33 +1,30 @@
-Kingshot Rally Timer - New Countdown Build V1
+Kingshot Rally Timer - V2 Live Logic
 
 Admin PIN: NEX26
 
-Collections used:
-- players
-- rallyProfiles
-- activeRallies
-- sentRallies
+Clarified game logic:
+- Enemy rally shows a visible 5:00 countdown.
+- After that visible rally timer ends, the enemy march begins.
+- Enemy march time is hidden in-game and stored in the rally profile.
+- Player solo marches are instant; they only use the player's march time.
 
-Core logic:
-1. Admin presses GO from a rally profile.
-2. An active rally starts with a visible 05:00 countdown.
-3. Admin adjusts that timer to match the in-game rally timer.
-4. Admin presses Send.
-5. Enemy Hit Time = Current Visible Rally Timer + Enemy March Time.
-6. Player Hit Time = Player March Time + 00:01.
-7. Player Send Countdown = Enemy Hit Time - Player Hit Time.
+Admin flow:
+1. Create rally profile with enemy march time.
+2. Press GO from a profile.
+3. App creates active rally with a visible 05:00 countdown.
+4. Adjust that countdown to match the in-game rally timer.
+5. Press Send.
 
-Firebase:
-- Replace firebase-config.js with your new Firebase web app config.
-- Use FIRESTORE-RULES.txt for quick open testing rules.
-- These rules are open for testing only. Lock them down before public use.
+Stored sent rally data:
+- rallyEndMs = when the visible 5:00 rally timer ends
+- enemyMarchSeconds = measured hidden enemy march time
+- enemyHitEndMs = rallyEndMs + enemyMarchSeconds
 
+Player live equation:
+Player SEND countdown =
+enemyHitEndMs - current time - (player march time + 1 second)
 
-HOTFIX V1.3 CHECKED:
-- Send to Players now stores shared enemy hit timing data.
-- Player page calculates SEND countdown live every second:
-  Enemy Hit Countdown - (Player March Time + 00:01)
-- New players should see already-sent active rallies after login.
-- Player march time changes immediately affect the SEND countdown.
-- Rally profile colour is assigned once and reused for future rallies.
-- JavaScript syntax checked before packaging.
+This means:
+- New players logging in after Send can still see active sent rallies.
+- Changing player march time recalculates the countdown live.
+- Rally colours are stored on the profile, so the same profile keeps the same colour.

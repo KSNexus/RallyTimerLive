@@ -1,14 +1,22 @@
 import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-export const app=initializeApp(firebaseConfig);export const db=getFirestore(app);
+
+export const app=initializeApp(firebaseConfig);
+export const db=getFirestore(app);
 export {doc,setDoc,deleteDoc,onSnapshot,collection,getDocs,serverTimestamp};
-export const ADMIN_PIN="NEX26",RALLY_BASE_SECONDS=300,PLAYER_LAND_OFFSET_SECONDS=1,RALLY_EXPIRE_BUFFER_MS=2000;
+
+export const ADMIN_PIN="NEX26";
+export const RALLY_BASE_SECONDS=300;
+export const PLAYER_LAND_OFFSET_SECONDS=1;
+export const RALLY_EXPIRE_BUFFER_MS=2000;
 export const RALLY_COLORS=["#b875ff","#42d9ff","#2ecc71","#f0c76a","#ff6ec7","#59f0c5","#ff8a4c","#7aa7ff"];
+
 export function applyTheme(){document.body.classList.toggle('light-mode',(localStorage.getItem('theme')||'dark')==='light')}
 export function syncThemeSwitch(){const sw=document.getElementById('themeSwitch');if(sw)sw.checked=(localStorage.getItem('theme')||'dark')==='light'}
 export function setThemeFromSwitch(isLight){localStorage.setItem('theme',isLight?'light':'dark');applyTheme();syncThemeSwitch()}
 export function setupUI(){applyTheme();syncThemeSwitch()}
+
 export const pad=n=>String(n).padStart(2,'0');
 export function parseMmSsToSeconds(value){if(!value)return null;const p=String(value).trim().split(':').map(Number);if(p.length!==2||p.some(Number.isNaN))return null;const[m,s]=p;if(m<0||m>99||s<0||s>59)return null;return m*60+s}
 export function secondsToMmSs(seconds){seconds=Math.max(0,Math.floor(Number(seconds)||0));return `${pad(Math.floor(seconds/60))}:${pad(seconds%60)}`}
@@ -18,5 +26,5 @@ export function makeId(prefix='ID'){return `${prefix}_${Date.now()}_${Math.rando
 export function colorForId(id){let h=0;String(id||'').split('').forEach(ch=>h=(h*31+ch.charCodeAt(0))|0);return RALLY_COLORS[Math.abs(h)%RALLY_COLORS.length]}
 export function countdownClass(s){if(s<=0)return'count-send';if(s<=3)return'count-critical';if(s<=10)return'count-red';if(s<=30)return'count-orange';return''}
 export function countdownText(s){return s<=0?'SEND':secondsToMmSs(s)}
-export function getRallyTimerSeconds(r,now=Date.now()){const end=Number(r.rallyTimerEndMs||0);return end?Math.ceil((end-now)/1000):0}
-export function isExpiredRally(r,now=Date.now()){const end=Number(r.playerSendEndMs||r.rallyTimerEndMs||0);return !!end&&now>=end+RALLY_EXPIRE_BUFFER_MS}
+export function getRallyCountdownSeconds(r,now=Date.now()){const end=Number(r.rallyEndMs||0);return end?Math.ceil((end-now)/1000):0}
+export function isExpiredRally(r,now=Date.now()){const end=Number(r.enemyHitEndMs||r.rallyEndMs||0);return !!end&&now>=end+RALLY_EXPIRE_BUFFER_MS}
