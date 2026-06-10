@@ -23,12 +23,11 @@ Firebase:
 - These rules are open for testing only. Lock them down before public use.
 
 
-HOTFIX V1.2:
-- Rebuilt Send to Players logic as live shared rally data.
-- Admin Send stores Enemy Hit End Time, not player-specific fixed countdowns.
+HOTFIX V1.3 CHECKED:
+- Send to Players now stores shared enemy hit timing data.
 - Player page calculates SEND countdown live every second:
   Enemy Hit Countdown - (Player March Time + 00:01)
-- New players now see already-sent active rallies after login.
-- Changing March Time immediately recalculates the player countdown.
-- Rally profile colour is assigned once when the profile is created.
-- Multiple active rallies from the same profile keep the same colour.
+- New players should see already-sent active rallies after login.
+- Player march time changes immediately affect the SEND countdown.
+- Rally profile colour is assigned once and reused for future rallies.
+- JavaScript syntax checked before packaging.
