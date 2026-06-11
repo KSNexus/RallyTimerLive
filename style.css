@@ -37,3 +37,12 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
 
 /* V2.2 */
 .instance-controls button{touch-action:manipulation;user-select:none;-webkit-user-select:none;}
+
+/* V2.3 visual UTC clock */
+.utc-card{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px;text-align:center}
+.utc-label{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:bold;margin-bottom:3px}
+.utc-clock{font-size:26px;font-weight:1000;font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:.4px}
+.utc-offset{font-size:12px;color:var(--muted);margin:3px 0 8px}
+.utc-controls{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:7px}
+.utc-controls button{height:38px;padding:0}
+.admin-utc-panel{margin-bottom:0}

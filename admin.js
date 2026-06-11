@@ -1,4 +1,4 @@
-import {db,doc,setDoc,deleteDoc,onSnapshot,collection,serverTimestamp,autoFormatMmSs,setupUI,setThemeFromSwitch,ADMIN_PIN,RALLY_BASE_SECONDS,parseMmSsToSeconds,makeId,colorForId,countdownText,getRallyCountdownSeconds,getEnemyMarchCountdownSeconds,getPhaseFromRally,isExpiredRally,esc} from './shared.js';
+import {db,doc,setDoc,deleteDoc,onSnapshot,collection,serverTimestamp,autoFormatMmSs,setupUI,setThemeFromSwitch,ADMIN_PIN,RALLY_BASE_SECONDS,parseMmSsToSeconds,makeId,colorForId,countdownText,getRallyCountdownSeconds,getEnemyMarchCountdownSeconds,getPhaseFromRally,isExpiredRally,esc,getUtcOffsetMs,setUtcOffsetMs,isUtcSet,formatUtcClock,formatSignedOffset} from './shared.js';
 
 window.setThemeFromSwitch=setThemeFromSwitch;
 setupUI();
@@ -9,19 +9,30 @@ let players={};
 let sentRallies={};
 let autoDeleteBusy=false;
 
+let utcHoldTimer=null;
+let utcHoldDelay=null;
+function clearUtcHold(){if(utcHoldDelay){clearTimeout(utcHoldDelay);utcHoldDelay=null;}if(utcHoldTimer){clearInterval(utcHoldTimer);utcHoldTimer=null;}}
+function adjustVisualUtc(deltaSeconds){setUtcOffsetMs(getUtcOffsetMs()+(Number(deltaSeconds)*1000));renderUtcClocks();}
+window.startUtcHold=(deltaSeconds)=>{clearUtcHold();adjustVisualUtc(deltaSeconds);utcHoldDelay=setTimeout(()=>{utcHoldTimer=setInterval(()=>adjustVisualUtc(deltaSeconds),100);},500);};
+window.stopUtcHold=clearUtcHold;
+window.setVisualUtc=()=>{setUtcOffsetMs(getUtcOffsetMs());const status=document.getElementById('utcSetStatus');if(status)status.textContent='UTC set for visual reference.';renderUtcClocks();};
+function renderUtcClocks(){const clockText=formatUtcClock();const offsetText=`Offset: ${formatSignedOffset()}`;['loginUtcClock','adminUtcClock'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=clockText;});['loginUtcOffset','adminUtcOffset'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=offsetText;});const status=document.getElementById('utcSetStatus');if(status)status.textContent=isUtcSet()?'UTC set for visual reference.':'Set UTC before unlocking admin.';}
+
+
 autoFormatMmSs(document.getElementById('profileMarchTime'));
 
 window.unlockAdmin=()=>{
+  if(!isUtcSet()){alert('Set UTC before unlocking admin.');return;}
   const pin=(document.getElementById('adminPin').value||'').trim().toUpperCase();
   if(pin!==ADMIN_PIN){alert('Incorrect PIN.');return;}
-  sessionStorage.setItem('adminUnlocked','yes');
+  localStorage.setItem('adminUnlocked','yes');
   document.getElementById('lockScreen').classList.add('hidden');
   document.getElementById('adminApp').classList.remove('hidden');
   renderAll();
 };
 
 window.lockAdmin=()=>{
-  sessionStorage.removeItem('adminUnlocked');
+  localStorage.removeItem('adminUnlocked');
   location.reload();
 };
 
@@ -190,8 +201,8 @@ function renderActiveRallies(){
         </div>
       </div>
       <div class="instance-controls">
-        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-1)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-1</button>
-        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',1)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+1</button>
+        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-0.5</button>
+        <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+0.5</button>
         <button class="good" onclick="sendToPlayers('${r.id}')">Send</button>
         <button class="danger" onclick="deleteActiveRally('${r.id}')">Delete</button>
       </div>
@@ -229,12 +240,13 @@ onSnapshot(collection(db,'activeRallies'),snap=>{activeRallies={};snap.forEach(d
 onSnapshot(collection(db,'players'),snap=>{players={};snap.forEach(d=>players[d.id]=d.data());renderPlayers();});
 onSnapshot(collection(db,'sentRallies'),snap=>{sentRallies={};snap.forEach(d=>sentRallies[d.id]=d.data());});
 
-setInterval(()=>{renderActiveRallies();autoDeleteExpired();},1000);
+setInterval(()=>{renderActiveRallies();autoDeleteExpired();renderUtcClocks();},1000);
 
 window.addEventListener('load',()=>{
+  renderUtcClocks();
   const pin=document.getElementById('adminPin');
   pin.addEventListener('keydown',e=>{if(e.key==='Enter')unlockAdmin();});
-  if(sessionStorage.getItem('adminUnlocked')==='yes'){
+  if(localStorage.getItem('adminUnlocked')==='yes'){
     document.getElementById('lockScreen').classList.add('hidden');
     document.getElementById('adminApp').classList.remove('hidden');
     renderAll();

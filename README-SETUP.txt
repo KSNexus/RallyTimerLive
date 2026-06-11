@@ -49,3 +49,14 @@ V2.2 HOTFIX:
 - Player March timer no longer uses traffic light colours.
 - Player March timer is visible immediately using the player's march time.
 - Player March timer starts counting down only after SEND reaches 00:00.
+
+V2.3 HOTFIX:
+- Admin rally +/- adjustment now changes by 0.5 seconds per click/hold tick.
+- Added a visual-only UTC clock to the Admin login panel.
+- UTC offset adjusts in 0.5 second intervals and supports hold-to-adjust.
+- Added Set UTC button.
+- Admin cannot unlock until UTC has been set.
+- After admin unlock, adjusted live UTC clock appears above Active Rally Instances.
+- UTC stores only a visual offset and remains a live clock.
+- UTC does not affect rally/player calculations, phases, or auto-delete timing.
+- Admin login now persists after closing/reopening browser using localStorage.

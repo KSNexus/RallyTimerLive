@@ -40,3 +40,9 @@ export function getEnemyMarchCountdownSeconds(r,now=Date.now()){
 export function getPhaseFromRally(r,now=Date.now()){
   return now>=Number(r.rallyEndMs||0)?'march':'rally';
 }
+
+export function getUtcOffsetMs(){return Number(localStorage.getItem('visualUtcOffsetMs')||0);}
+export function setUtcOffsetMs(ms){localStorage.setItem('visualUtcOffsetMs',String(Number(ms)||0));localStorage.setItem('visualUtcSet','yes');}
+export function isUtcSet(){return localStorage.getItem('visualUtcSet')==='yes';}
+export function formatUtcClock(ms=Date.now()){const d=new Date(ms+getUtcOffsetMs());return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;}
+export function formatSignedOffset(ms=getUtcOffsetMs()){const sign=Number(ms)>=0?'+':'-';const abs=Math.abs(Number(ms)||0);return `${sign}${(abs/1000).toFixed(1)}s`;}
