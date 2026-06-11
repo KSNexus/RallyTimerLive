@@ -52,3 +52,5 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
 .player-timestamp{margin-top:4px}
 .player-phase-row{grid-template-columns:1fr auto}
 #sendOffsetInput{cursor:default}
+
+.active-instance .timestamp-line{margin-top:8px;}

@@ -106,6 +106,7 @@ window.sendToPlayers=async(id)=>{
   const rallyCountdownSeconds=Math.max(0,getRallyCountdownSeconds(r,now));
   const enemyMarchSeconds=Number(r.enemyMarchSeconds||0);
   const enemyHitEndMs=Number(r.rallyEndMs)+(enemyMarchSeconds*1000);
+  const enemyHitUtcText=formatUtcTimestamp(enemyHitEndMs);
 
   await setDoc(doc(db,'sentRallies',id),{
     sourceRallyId:id,
@@ -116,11 +117,12 @@ window.sendToPlayers=async(id)=>{
     rallyCountdownSecondsAtSend:rallyCountdownSeconds,
     enemyMarchSeconds,
     enemyHitEndMs,
+    enemyHitUtcText,
     sentAtMs:now,
     createdAt:serverTimestamp()
   },{merge:true});
 
-  await setDoc(doc(db,'activeRallies',id),{sent:true,sentAtMs:now,updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,'activeRallies',id),{sent:true,sentAtMs:now,enemyHitUtcText,updatedAt:serverTimestamp()},{merge:true});
 };
 
 window.deleteActiveRally=async(id)=>{
@@ -200,13 +202,13 @@ function renderActiveRallies(){
           </div>
         </div>
       </div>
-      <div class="timestamp-line">Enemy Rally Hit: ${formatUtcTimestamp(r.enemyHitEndMs)}</div>
       <div class="instance-controls">
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-0.5</button>
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+0.5</button>
         <button class="good" onclick="sendToPlayers('${r.id}')">Send</button>
         <button class="danger" onclick="deleteActiveRally('${r.id}')">Delete</button>
       </div>
+      ${r.sent?`<div class="timestamp-line">Enemy Rally Hit: ${esc(r.enemyHitUtcText||'--:--:-- UTC')}</div>`:''}
     </div>`;
   });
   el.innerHTML=rows.join('')||`<div class="empty-state">No active rallies.</div>`;

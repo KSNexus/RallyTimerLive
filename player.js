@@ -61,6 +61,7 @@ window.adjustSendOffset=(deltaSeconds)=>{
 window.setSendOffset=()=>{
   const status=document.getElementById('offsetStatus');
   if(status)status.textContent='Set';
+  resetSendStampCache();
   document.getElementById('sendOffsetInput').value=formatSignedOffset(getPlayerSendOffsetMs());
   renderRallies();
 };
@@ -79,6 +80,26 @@ function getPlayerTiming(rally,now){
     playerSendEndMs,
     playerMarchEndMs
   };
+}
+
+
+function getSendStampKey(rally){
+  return `sendStamp_${linkedName()}_${rally.sourceRallyId||rally.id}`;
+}
+
+function getCachedSendTimeText(rally,timing){
+  const key=getSendStampKey(rally);
+  const cached=localStorage.getItem(key);
+  if(cached)return cached;
+  const stamp=formatUtcTimestamp(timing.playerSendEndMs);
+  localStorage.setItem(key,stamp);
+  return stamp;
+}
+
+function resetSendStampCache(){
+  Object.keys(localStorage).forEach(k=>{
+    if(k.startsWith(`sendStamp_${linkedName()}_`))localStorage.removeItem(k);
+  });
 }
 
 function renderRallies(){
@@ -103,7 +124,7 @@ function renderRallies(){
           <div class="player-timer-block"><div class="player-timer-label">Send</div><div class="rally-countdown ${sendCls}" ${sendColor}>${countdownText(r.timing.sendSeconds)}</div></div>
           <div class="player-timer-block"><div class="player-timer-label">March</div><div class="rally-countdown" style="color:${color}">${countdownText(marchDisplay)}</div></div>
         </div>
-        <div class="timestamp-line player-timestamp">Rally Send Time: ${formatUtcTimestamp(r.timing.playerSendEndMs)}</div>
+        <div class="timestamp-line player-timestamp">Rally Send Time: ${getCachedSendTimeText(r,r.timing)}</div>
       </div>`;
     });
   el.innerHTML=rows.join('')||`<div class="empty-state">No active rallies.</div>`;

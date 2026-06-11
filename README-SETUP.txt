@@ -70,3 +70,10 @@ V2.4 HOTFIX:
 - Send Offset adjusts active rally SEND countdowns only.
 - Send Offset changes in 0.5 second steps.
 - Positive Send Offset delays the send countdown; negative Send Offset makes it earlier.
+
+V2.5 HOTFIX:
+- Admin Enemy Rally Hit timestamp is now calculated/stored when Send is clicked.
+- Admin Enemy Rally Hit timestamp no longer live-updates while adjusting rally time.
+- Admin Enemy Rally Hit line moved below the rally control buttons.
+- Player Rally Send Time is cached locally and does not live-update every second.
+- Player Rally Send Time refreshes when the player presses Set on Send Offset.
