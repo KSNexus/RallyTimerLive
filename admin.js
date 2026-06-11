@@ -1,4 +1,4 @@
-import {db,doc,setDoc,deleteDoc,onSnapshot,collection,serverTimestamp,autoFormatMmSs,setupUI,setThemeFromSwitch,ADMIN_PIN,RALLY_BASE_SECONDS,parseMmSsToSeconds,makeId,colorForId,countdownText,getRallyCountdownSeconds,getEnemyMarchCountdownSeconds,getPhaseFromRally,isExpiredRally,esc,getUtcOffsetMs,setUtcOffsetMs,isUtcSet,formatUtcClock,formatSignedOffset} from './shared.js';
+import {db,doc,setDoc,deleteDoc,onSnapshot,collection,serverTimestamp,autoFormatMmSs,setupUI,setThemeFromSwitch,ADMIN_PIN,RALLY_BASE_SECONDS,parseMmSsToSeconds,makeId,colorForId,countdownText,getRallyCountdownSeconds,getEnemyMarchCountdownSeconds,getPhaseFromRally,isExpiredRally,esc,getUtcOffsetMs,setUtcOffsetMs,isUtcSet,formatUtcClock,formatSignedOffset,formatUtcTimestamp} from './shared.js';
 
 window.setThemeFromSwitch=setThemeFromSwitch;
 setupUI();
@@ -200,6 +200,7 @@ function renderActiveRallies(){
           </div>
         </div>
       </div>
+      <div class="timestamp-line">Enemy Rally Hit: ${formatUtcTimestamp(r.enemyHitEndMs)}</div>
       <div class="instance-controls">
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-0.5</button>
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+0.5</button>

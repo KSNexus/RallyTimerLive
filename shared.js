@@ -46,3 +46,7 @@ export function setUtcOffsetMs(ms){localStorage.setItem('visualUtcOffsetMs',Stri
 export function isUtcSet(){return localStorage.getItem('visualUtcSet')==='yes';}
 export function formatUtcClock(ms=Date.now()){const d=new Date(ms+getUtcOffsetMs());return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;}
 export function formatSignedOffset(ms=getUtcOffsetMs()){const sign=Number(ms)>=0?'+':'-';const abs=Math.abs(Number(ms)||0);return `${sign}${(abs/1000).toFixed(1)}s`;}
+
+export function formatUtcTimestamp(ms){const d=new Date(Number(ms||0)+getUtcOffsetMs());return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;}
+export function getPlayerSendOffsetMs(){return Number(localStorage.getItem('playerSendOffsetMs')||0);}
+export function setPlayerSendOffsetMs(ms){localStorage.setItem('playerSendOffsetMs',String(Number(ms)||0));}

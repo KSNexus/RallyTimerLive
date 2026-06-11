@@ -60,3 +60,13 @@ V2.3 HOTFIX:
 - UTC stores only a visual offset and remains a live clock.
 - UTC does not affect rally/player calculations, phases, or auto-delete timing.
 - Admin login now persists after closing/reopening browser using localStorage.
+
+V2.4 HOTFIX:
+- Admin active rallies now show Enemy Rally Hit UTC timestamp.
+- Player active rallies now show Rally Send Time UTC timestamp.
+- Both UTC timestamps use the visual UTC offset and are display-only.
+- Player March Time Adjust panel replaced with Send Offset panel.
+- Player login march time remains stored and remains used in calculations.
+- Send Offset adjusts active rally SEND countdowns only.
+- Send Offset changes in 0.5 second steps.
+- Positive Send Offset delays the send countdown; negative Send Offset makes it earlier.
