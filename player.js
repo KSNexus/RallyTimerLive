@@ -6,6 +6,7 @@ setupUI();
 let playerUnsub=null;
 let sentRallies={};
 let currentMarchTime=localStorage.getItem('marchTime')||'';
+let draftSendOffsetMs=getPlayerSendOffsetMs();
 
 autoFormatMmSs(document.getElementById('loginMarchTime'));
 
@@ -17,7 +18,7 @@ function showPlayer(){
   document.getElementById('loginView').classList.add('hidden');
   document.getElementById('playerView').classList.remove('hidden');
   document.getElementById('welcomeName').textContent=linkedName()||'Player';
-  document.getElementById('sendOffsetInput').value=formatSignedOffset(getPlayerSendOffsetMs());
+  document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
   listenToMyPlayer();
   renderRallies();
 }
@@ -33,7 +34,7 @@ function listenToMyPlayer(){
     if(d.marchTime&&d.marchTime!==currentMarchTime){
       currentMarchTime=d.marchTime;
       localStorage.setItem('marchTime',currentMarchTime);
-      document.getElementById('sendOffsetInput').value=formatSignedOffset(getPlayerSendOffsetMs());
+      document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
     }
     renderRallies();
   });
@@ -50,19 +51,18 @@ window.loginPlayer=async()=>{
   showPlayer();
 };
 window.adjustSendOffset=(deltaSeconds)=>{
-  const next=getPlayerSendOffsetMs()+(Number(deltaSeconds)*1000);
-  setPlayerSendOffsetMs(next);
-  document.getElementById('sendOffsetInput').value=formatSignedOffset(next);
+  draftSendOffsetMs += Number(deltaSeconds)*1000;
+  document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
   const status=document.getElementById('offsetStatus');
-  if(status)status.textContent='Not set';
-  renderRallies();
+  if(status)status.textContent=`Current Offset: ${formatSignedOffset(getPlayerSendOffsetMs())}`;
 };
 
 window.setSendOffset=()=>{
-  const status=document.getElementById('offsetStatus');
-  if(status)status.textContent='Set';
+  setPlayerSendOffsetMs(draftSendOffsetMs);
   resetSendStampCache();
-  document.getElementById('sendOffsetInput').value=formatSignedOffset(getPlayerSendOffsetMs());
+  document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
+  const status=document.getElementById('offsetStatus');
+  if(status)status.textContent=`Current Offset: ${formatSignedOffset(getPlayerSendOffsetMs())}`;
   renderRallies();
 };
 
@@ -135,7 +135,7 @@ window.addEventListener('load',()=>{
   if(n)document.getElementById('loginName').value=n;
   if(m)document.getElementById('loginMarchTime').value=m;
   currentMarchTime=m||'';
-  const offsetInput=document.getElementById('sendOffsetInput');if(offsetInput)offsetInput.value=formatSignedOffset(getPlayerSendOffsetMs());if(n&&m)showPlayer();else showLogin();
+  draftSendOffsetMs=getPlayerSendOffsetMs();const offsetInput=document.getElementById('sendOffsetInput');if(offsetInput)offsetInput.value=formatSignedOffset(draftSendOffsetMs);const offsetStatus=document.getElementById('offsetStatus');if(offsetStatus)offsetStatus.textContent=`Current Offset: ${formatSignedOffset(getPlayerSendOffsetMs())}`;if(n&&m)showPlayer();else showLogin();
 });
 onSnapshot(collection(db,'sentRallies'),snap=>{sentRallies={};snap.forEach(d=>sentRallies[d.id]=d.data());renderRallies();});
 setInterval(renderRallies,1000);

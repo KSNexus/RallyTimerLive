@@ -77,3 +77,11 @@ V2.5 HOTFIX:
 - Admin Enemy Rally Hit line moved below the rally control buttons.
 - Player Rally Send Time is cached locally and does not live-update every second.
 - Player Rally Send Time refreshes when the player presses Set on Send Offset.
+
+V2.6 USER QOL:
+- Added -30 and +30 second admin rally adjustment buttons.
+- Existing -0.5 / +0.5 hold-to-adjust controls remain unchanged.
+- Player Send Offset now separates draft adjustment from saved active offset.
+- +/- changes the draft only; Set commits it.
+- Current saved offset is shown underneath.
+- Admin Active Players now shows each player's stored march time.

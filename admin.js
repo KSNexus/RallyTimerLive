@@ -202,11 +202,13 @@ function renderActiveRallies(){
           </div>
         </div>
       </div>
-      <div class="instance-controls">
+      <div class="instance-controls instance-controls-v26">
+        <button class="secondary jump-adjust" ${disabled} onclick="adjustActiveRally('${r.id}',-30)">-30</button>
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',-0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">-0.5</button>
         <button class="secondary${disabledClass}" ${disabled} onpointerdown="startHoldAdjust('${r.id}',0.5)" onpointerup="stopHoldAdjust()" onpointercancel="stopHoldAdjust()" onpointerleave="stopHoldAdjust()">+0.5</button>
-        <button class="good" onclick="sendToPlayers('${r.id}')">Send</button>
-        <button class="danger" onclick="deleteActiveRally('${r.id}')">Delete</button>
+        <button class="secondary jump-adjust" ${disabled} onclick="adjustActiveRally('${r.id}',30)">+30</button>
+        <button class="good send-wide" onclick="sendToPlayers('${r.id}')">Send</button>
+        <button class="danger delete-wide" onclick="deleteActiveRally('${r.id}')">Delete</button>
       </div>
       ${r.sent?`<div class="timestamp-line">Enemy Rally Hit: ${esc(r.enemyHitUtcText||'--:--:-- UTC')}</div>`:''}
     </div>`;
@@ -217,8 +219,9 @@ function renderActiveRallies(){
 function renderPlayers(){
   const el=document.getElementById('playerList');
   if(!el)return;
-  const rows=Object.entries(players).sort((a,b)=>(a[1].name||'').localeCompare(b[1].name||'')).map(([id,p])=>`<div class="player-row">
+  const rows=Object.entries(players).sort((a,b)=>(a[1].name||'').localeCompare(b[1].name||'')).map(([id,p])=>`<div class="player-row player-row-v26">
     <div class="rally-name">${esc(p.name||id)}</div>
+    <div class="player-march-time">${esc(p.marchTime||'--:--')}</div>
     <button class="danger small" onclick="deletePlayer('${id}')">Delete</button>
   </div>`);
   el.innerHTML=rows.join('')||`<div class="empty-state">No active players.</div>`;

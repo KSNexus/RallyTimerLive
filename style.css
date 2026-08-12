@@ -54,3 +54,14 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
 #sendOffsetInput{cursor:default}
 
 .active-instance .timestamp-line{margin-top:8px;}
+
+/* V2.6 user QoL */
+.instance-controls-v26{grid-template-columns:52px 52px 52px 52px 1fr 84px}
+.instance-controls-v26 .jump-adjust{font-size:12px}
+.player-row-v26{grid-template-columns:1fr 82px auto}
+.player-march-time{text-align:center;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+@media(max-width:520px){
+  .instance-controls-v26{grid-template-columns:repeat(4,1fr)}
+  .instance-controls-v26 .send-wide{grid-column:1/4}
+  .instance-controls-v26 .delete-wide{grid-column:4/5}
+}
