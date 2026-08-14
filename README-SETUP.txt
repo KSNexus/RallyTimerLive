@@ -86,10 +86,11 @@ V2.6 USER QOL:
 - Current saved offset is shown underneath.
 - Admin Active Players now shows each player's stored march time.
 
-V2.7.1 MARCH TIME EDIT FIX:
-- Rebuilt from the clean V2.6 baseline.
-- Added manual player March Time editing (MM:SS + Update).
-- Fixed the broken player.js declaration that stopped login and MM:SS formatting in the previous V2.7 build.
-- Login / Save remains unchanged from V2.6.
-- Updated March Time saves to Firebase and recalculates active/future player rally timings.
-- Send Offset remains separate and unchanged.
+V2.7 CHANGE MARCH TIME:
+- Built from the clean V2.6 baseline.
+- Added a Change March Time button to the player page.
+- Button logs the player out locally and returns them to the existing login screen.
+- Player name is carried back into the login field for convenience.
+- March Time field is cleared so the player can enter a new MM:SS value.
+- Logging back in updates the existing Firebase player record with the new March Time.
+- No changes to rally calculations, Send Offset logic, UTC logic, or admin logic.
