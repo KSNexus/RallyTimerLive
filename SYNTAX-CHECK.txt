@@ -5,4 +5,4 @@ JavaScript syntax check passed:
 - admin.js: OK
 - service-worker.js: OK
 
-Regression checks passed for Player Login / Save and MM:SS formatting.
+V2.6 player.js remains untouched.

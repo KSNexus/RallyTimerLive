@@ -66,8 +66,7 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
   .instance-controls-v26 .delete-wide{grid-column:4/5}
 }
 
-
-/* V2.7 Change March Time */
+/* V2.7.2 safe Change March Time */
 .change-march-wrap{
   display:flex;
   justify-content:flex-end;

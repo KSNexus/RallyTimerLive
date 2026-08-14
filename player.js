@@ -50,24 +50,6 @@ window.loginPlayer=async()=>{
   await setDoc(doc(db,'players',name),{name,marchTime,updatedAt:serverTimestamp()},{merge:true});
   showPlayer();
 };
-window.changeMarchTime=()=>{
-  if(playerUnsub){
-    playerUnsub();
-    playerUnsub=null;
-  }
-
-  const existingName=linkedName();
-
-  localStorage.removeItem('playerName');
-  localStorage.removeItem('marchTime');
-  currentMarchTime='';
-
-  document.getElementById('loginName').value=existingName||'';
-  document.getElementById('loginMarchTime').value='';
-
-  showLogin();
-};
-
 window.adjustSendOffset=(deltaSeconds)=>{
   draftSendOffsetMs += Number(deltaSeconds)*1000;
   document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
