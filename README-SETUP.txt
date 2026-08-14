@@ -98,3 +98,9 @@ V2.7.3 BUTTON STYLE:
 - Change March Time button is now red.
 - Change March Time button is now centred.
 - Button functionality is unchanged.
+
+V2.7.4 DEFAULT MARCH TIME:
+- Built from confirmed-working V2.7.3 baseline.
+- Player login March Time placeholder/default changed from 00:49 to 00:00.
+- Existing saved player march times are unchanged.
+- No rally, offset, UTC, admin, or login logic changed.
