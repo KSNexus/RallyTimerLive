@@ -92,3 +92,9 @@ V2.7.2 CHANGE MARCH TIME SAFE:
 - Button clears only the saved player name/march time and reloads the existing login page.
 - No new player.js function was added.
 - Player login, MM:SS formatting, rally calculations, Send Offset, UTC, and admin code are untouched.
+
+V2.7.3 BUTTON STYLE:
+- Built from confirmed-working V2.7.2 baseline.
+- Change March Time button is now red.
+- Change March Time button is now centred.
+- Button functionality is unchanged.
