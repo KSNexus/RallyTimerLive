@@ -65,3 +65,8 @@ button:disabled,.disabled-btn{opacity:.45;cursor:not-allowed}
   .instance-controls-v26 .send-wide{grid-column:1/4}
   .instance-controls-v26 .delete-wide{grid-column:4/5}
 }
+
+/* V2.7 manual March Time edit */
+.march-edit-row{display:grid;grid-template-columns:1fr 88px;gap:6px;align-items:center}
+.march-edit-row input,.march-edit-row button{height:40px;margin:0}
+.march-edit-row input{text-align:center}

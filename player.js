@@ -6,9 +6,10 @@ setupUI();
 let playerUnsub=null;
 let sentRallies={};
 let currentMarchTime=localStorage.getItem('marchTime')||'';
-let draftSendOffsetMs=getPlayerSendOffsetMs();
+let const marchEditInput=document.getElementById('marchTimeEditInput');if(marchEditInput)marchEditInput.value=m||'';const marchTimeStatus=document.getElementById('marchTimeStatus');if(marchTimeStatus&&m)marchTimeStatus.textContent=`Current March Time: ${m}`;draftSendOffsetMs=getPlayerSendOffsetMs();
 
 autoFormatMmSs(document.getElementById('loginMarchTime'));
+autoFormatMmSs(document.getElementById('marchTimeEditInput'));
 
 
 const linkedName=()=>localStorage.getItem('playerName')||'';
@@ -18,6 +19,7 @@ function showPlayer(){
   document.getElementById('loginView').classList.add('hidden');
   document.getElementById('playerView').classList.remove('hidden');
   document.getElementById('welcomeName').textContent=linkedName()||'Player';
+  const marchEdit=document.getElementById('marchTimeEditInput');if(marchEdit)marchEdit.value=currentMarchTime||'00:00';
   document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
   listenToMyPlayer();
   renderRallies();
@@ -34,6 +36,7 @@ function listenToMyPlayer(){
     if(d.marchTime&&d.marchTime!==currentMarchTime){
       currentMarchTime=d.marchTime;
       localStorage.setItem('marchTime',currentMarchTime);
+      const marchEdit=document.getElementById('marchTimeEditInput');if(marchEdit)marchEdit.value=currentMarchTime;
       document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);
     }
     renderRallies();
@@ -50,6 +53,23 @@ window.loginPlayer=async()=>{
   await setDoc(doc(db,'players',name),{name,marchTime,updatedAt:serverTimestamp()},{merge:true});
   showPlayer();
 };
+window.updateMarchTime=async()=>{
+  const name=linkedName();
+  const input=document.getElementById('marchTimeEditInput');
+  const value=(input?.value||'').trim();
+  if(parseMmSsToSeconds(value)===null){
+    alert('Enter march time as MM:SS.');
+    return;
+  }
+  currentMarchTime=value;
+  localStorage.setItem('marchTime',value);
+  await setDoc(doc(db,'players',name),{name,marchTime:value,updatedAt:serverTimestamp()},{merge:true});
+  const status=document.getElementById('marchTimeStatus');
+  if(status)status.textContent=`Current March Time: ${value}`;
+  resetSendStampCache();
+  renderRallies();
+};
+
 window.adjustSendOffset=(deltaSeconds)=>{
   draftSendOffsetMs += Number(deltaSeconds)*1000;
   document.getElementById('sendOffsetInput').value=formatSignedOffset(draftSendOffsetMs);

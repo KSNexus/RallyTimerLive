@@ -85,3 +85,11 @@ V2.6 USER QOL:
 - +/- changes the draft only; Set commits it.
 - Current saved offset is shown underneath.
 - Admin Active Players now shows each player's stored march time.
+
+V2.7 MARCH TIME EDIT:
+- Added manual March Time editing on the player page.
+- No +/- buttons for March Time.
+- Player types a new MM:SS value and presses Update.
+- Updated March Time saves to Firebase and is used for active and future rally calculations.
+- Admin Active Players list updates automatically.
+- Send Offset remains separate and unchanged.
